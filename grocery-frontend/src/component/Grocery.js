@@ -49,6 +49,41 @@ export class Grocery extends Component {
 		}
 	};
 
+	handleDeleteByID = async (id) => {
+		try {
+			let deletedGrocery = await axios.delete(
+				"http://localhost:3001/grocery/delete-by-id-v1",
+				{
+					data: { groceryID: id },
+				}
+			);
+			let newDeletedGroceryArrayList = this.state.groceryList.filter(
+				(item) => item._id !== deletedGrocery.data.data._id
+			);
+			this.setState({
+				groceryList: newDeletedGroceryArrayList,
+			});
+
+			console.log(deletedGrocery);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	handleDeleteByParamsID = async (id) => {
+		try {
+			let deletedGrocery = await axios.delete(
+				`http://localhost:3001/grocery/delete-by-id-v2/${id}`
+			);
+			let newDeletedGroceryArrayList = this.state.groceryList.filter(
+				(item) => item._id !== deletedGrocery.data.data._id
+			);
+
+			this.setState({ groceryList: newDeletedGroceryArrayList });
+		} catch (e) {
+			console.log(e);
+		}
+	};
 	render() {
 		return (
 			<div style={{ marginTop: 20, textAlign: "center" }}>
@@ -74,11 +109,21 @@ export class Grocery extends Component {
 							<span style={{ margin: "10px" }}>
 								{item.grocery}
 							</span>
-							<button
+							{/*  <button
+								onClick={() => this.handleDeleteByID(item._id)}
 								style={{ margin: "10px" }}
 								className="btn btn-danger"
 							>
-								Delete
+								Delete V1
+							</button> */}
+							<button
+								onClick={() =>
+									this.handleDeleteByParamsID(item._id)
+								}
+								style={{ margin: "10px" }}
+								className="btn btn-danger"
+							>
+								Delete V2
 							</button>
 						</div>
 					);

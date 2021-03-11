@@ -20,8 +20,32 @@ module.exports = {
 	getAllGrocery: async (req, res) => {
 		try {
 			let allGrocery = await Grocery.find({});
+
 			res.json({
 				allGrocery: allGrocery,
+			});
+		} catch (e) {
+			res.status(500).json({ error: e.message });
+		}
+	},
+	deleteByIDV1: async (req, res) => {
+		try {
+			let deletedGrocery = await Grocery.findByIdAndDelete({
+				_id: req.body.groceryID,
+			});
+			res.json({ data: deletedGrocery });
+		} catch (e) {
+			res.status(500).json({ error: e.message });
+		}
+	},
+	deleteByIDV2: async (req, res) => {
+		try {
+			let deletedGrocery = await Grocery.findByIdAndDelete({
+				_id: req.params.id,
+			});
+
+			res.json({
+				data: deletedGrocery,
 			});
 		} catch (e) {
 			res.status(500).json({ error: e.message });
